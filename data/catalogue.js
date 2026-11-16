@@ -1,0 +1,195 @@
+window.CATALOGUE = [
+    {
+        "title":  "1 Palette Pellets von CRÉPITO",
+        "url":  "https://holzpellets.amperkamin.com/produit/1-palette-pellets-von-crepito/",
+        "cat":  "holzpellets",
+        "img":  "0bf449b7-78da-4b5f-af6e-3f986e63b48d-800x800.png",
+        "price":  290,
+        "regular":  null
+    },
+    {
+        "title":  "1 Palette Pellets von HOLZ HARRY",
+        "url":  "https://holzpellets.amperkamin.com/produit/1-palette-pellets-von-holz-harry/",
+        "cat":  "holzpellets",
+        "img":  "73a266ee-3759-4e3a-a667-e0db788d629e-800x800.png",
+        "price":  330,
+        "regular":  null
+    },
+    {
+        "title":  "1 Palette Pellets von PIVETEAU HP+",
+        "url":  "https://holzpellets.amperkamin.com/produit/1-palette-pellets-von-piveteau-hp/",
+        "cat":  "holzpellets",
+        "img":  "da91afa6-38fc-44a7-952e-cc3527530896-800x800.png",
+        "price":  370,
+        "regular":  null
+    },
+    {
+        "title":  "1 Palette Pellets von TOTALENERGIES",
+        "url":  "https://holzpellets.amperkamin.com/produit/1-palette-pellets-von-totalenergies/",
+        "cat":  "holzpellets",
+        "img":  "5b1ef977-ff6c-4a27-b3e1-f221d49e2c21-708x800.png",
+        "price":  395,
+        "regular":  null
+    },
+    {
+        "title":  "1 Palette Pellets von VERBA",
+        "url":  "https://holzpellets.amperkamin.com/produit/1-palette-pellets-von-verba/",
+        "cat":  "holzpellets",
+        "img":  "0fc897f8-b52e-445c-a3a9-fb4f33709171-800x800.png",
+        "price":  280,
+        "regular":  null
+    },
+    {
+        "title":  "10 Paletten REKORD Braunkohlebriketts (40×25 kg) – Großvorrat 10 t",
+        "url":  "https://holzpellets.amperkamin.com/produit/10-paletten-rekord-braunkohlebriketts-40x25-kg-grossvorrat-10-t/",
+        "cat":  "briketts",
+        "img":  "25kg-palette-testsiegel2026-produktbild_1920_1920x1920-1-800x800.jpg",
+        "price":  2548,
+        "regular":  3136
+    },
+    {
+        "title":  "15 Paletten REKORD Braunkohlebriketts (40×25 kg) – 15 t Großvorrat",
+        "url":  "https://holzpellets.amperkamin.com/produit/15-paletten-rekord-braunkohlebriketts-40x25-kg-15-t-grossvorrat/",
+        "cat":  "briketts",
+        "img":  "25kg-palette-testsiegel2026-produktbild_1920_1920x1920-1-800x800.jpg",
+        "price":  4357.08,
+        "regular":  5362.56
+    },
+    {
+        "title":  "20 Paletten REKORD Braunkohlebriketts (40×25 kg) – 20 t Vorrat",
+        "url":  "https://holzpellets.amperkamin.com/produit/20-paletten-rekord-braunkohlebriketts-40x25-kg-20-t-vorrat/",
+        "cat":  "briketts",
+        "img":  "25kg-palette-testsiegel2026-produktbild_1920_1920x1920-1-800x800.jpg",
+        "price":  5813.08,
+        "regular":  7154.56
+    },
+    {
+        "title":  "25 Paletten REKORD Braunkohlebriketts (40×25 kg) – 25 t Großvorrat",
+        "url":  "https://holzpellets.amperkamin.com/produit/25-paletten-rekord-braunkohlebriketts-40x25-kg-25-t-grossvorrat/",
+        "cat":  "briketts",
+        "img":  "25kg-palette-testsiegel2026-produktbild_1920_1920x1920-1-800x800.jpg",
+        "price":  7261.8,
+        "regular":  8937.6
+    },
+    {
+        "title":  "3 Paletten HOLZ HARRY-Pellets",
+        "url":  "https://holzpellets.amperkamin.com/produit/3-paletten-holz-harry-pellets/",
+        "cat":  "holzpellets",
+        "img":  "73a266ee-3759-4e3a-a667-e0db788d629e-800x800.png",
+        "price":  1225,
+        "regular":  null
+    },
+    {
+        "title":  "3 Paletten Pellets von PIVETEAU HP+",
+        "url":  "https://holzpellets.amperkamin.com/produit/3-paletten-pellets-von-piveteau-hp/",
+        "cat":  "holzpellets",
+        "img":  "da91afa6-38fc-44a7-952e-cc3527530896-800x800.png",
+        "price":  990,
+        "regular":  null
+    },
+    {
+        "title":  "3 Paletten Pellets von TOTALENERGIES",
+        "url":  "https://holzpellets.amperkamin.com/produit/3-paletten-pellets-von-totalenergies/",
+        "cat":  "holzpellets",
+        "img":  "PES.d1f55af8-1-1.png",
+        "price":  1275,
+        "regular":  null
+    },
+    {
+        "title":  "3 Paletten Pellets von VERBA",
+        "url":  "https://holzpellets.amperkamin.com/produit/3-paletten-pellets-von-verba/",
+        "cat":  "holzpellets",
+        "img":  "0fc897f8-b52e-445c-a3a9-fb4f33709171-800x800.png",
+        "price":  890,
+        "regular":  null
+    },
+    {
+        "title":  "3 Paletten Pellets von WOODSTOCK",
+        "url":  "https://holzpellets.amperkamin.com/produit/3-paletten-pellets-von-woodstock/",
+        "cat":  "holzpellets",
+        "img":  "40561a2f-3755-4bdb-978a-6a79aa21e84b-800x800.png",
+        "price":  1005,
+        "regular":  null
+    },
+    {
+        "title":  "30 Paletten REKORD Braunkohlebriketts (40×25 kg) – 30 t Großvorrat",
+        "url":  "https://holzpellets.amperkamin.com/produit/30-paletten-rekord-braunkohlebriketts-40x25-kg-30-t-grossvorrat/",
+        "cat":  "briketts",
+        "img":  "25kg-palette-testsiegel2026-produktbild_1920_1920x1920-1-800x800.jpg",
+        "price":  8714.16,
+        "regular":  10725.12
+    },
+    {
+        "title":  "5 Paletten REKORD Braunkohlebriketts (40×25 kg) – Vorratspaket",
+        "url":  "https://holzpellets.amperkamin.com/produit/5-paletten-rekord-braunkohlebriketts-40x25-kg-vorratspaket/",
+        "cat":  "briketts",
+        "img":  "25kg-palette-testsiegel2026-produktbild_1920_1920x1920-1-800x800.jpg",
+        "price":  1091.27,
+        "regular":  1343.1
+    },
+    {
+        "title":  "Anzündholz Weichholz – Palette (ca. 450 dm³, trocken)",
+        "url":  "https://holzpellets.amperkamin.com/produit/anzuendholz-weichholz-palette-ca-450-dm³-trocken/",
+        "cat":  "kaminholz",
+        "img":  "anz-ndholz-anfeuerholz-palette018fb_2048x2048-800x800.jpg",
+        "price":  567.98,
+        "regular":  699.05
+    },
+    {
+        "title":  "Birken Brennholz 10 inch 1 Raummeter Kammertrocken Palette Nachhaltig",
+        "url":  "https://holzpellets.amperkamin.com/produit/birken-brennholz-10-inch-1-raummeter-kammertrocken-palette-nachhaltig/",
+        "cat":  "kaminholz",
+        "img":  "Brennholz-Birke-25-cm-1-RM-1_2048x2048.jpg",
+        "price":  202.46,
+        "regular":  249.18
+    },
+    {
+        "title":  "Birken-Brennholz 28 cm 36 Säcke 500 kg",
+        "url":  "https://holzpellets.amperkamin.com/produit/birken-brennholz-28-cm-36-saecke-500-kg/",
+        "cat":  "kaminholz",
+        "img":  "Brennholz-Birke-28-cm-im-Sack-1_2048x2048.jpg",
+        "price":  287.79,
+        "regular":  354.2
+    },
+    {
+        "title":  "Birkenholz Brennholz 25cm 2 Raummeter Kammergetrocknet Palette",
+        "url":  "https://holzpellets.amperkamin.com/produit/birkenholz-brennholz-25cm-2-raummeter-kammergetrocknet-palette/",
+        "cat":  "kaminholz",
+        "img":  "0_2048x2048.jpg",
+        "price":  287.79,
+        "regular":  354.2
+    },
+    {
+        "title":  "Birkenholz Kaminholz 28 cm 36 Säcke à 40 Liter Palette",
+        "url":  "https://holzpellets.amperkamin.com/produit/birkenholz-kaminholz-28-cm-36-saecke-a-40-liter-palette/",
+        "cat":  "kaminholz",
+        "img":  "Rundholz-Birke-28-cm-im-Sack-1_2048x2048.jpg",
+        "price":  202.46,
+        "regular":  249.18
+    },
+    {
+        "title":  "Brennholz Buche 25 cm 1 Palette 2m³",
+        "url":  "https://holzpellets.amperkamin.com/produit/brennholz-buche-25-cm-1-palette-2m³/",
+        "cat":  "kaminholz",
+        "img":  "Kaminholz_5092ecc6-2bb5-45bd-8795-dd3301116220_2048x2048-800x800.jpg",
+        "price":  407.99,
+        "regular":  502.14
+    },
+    {
+        "title":  "Brennholz Buche 33 cm – Palette 900 kg (kammergetrocknet, gespalten)",
+        "url":  "https://holzpellets.amperkamin.com/produit/brennholz-buche-33-cm-palette-900-kg-kammergetrocknet-gespalten/",
+        "cat":  "kaminholz",
+        "img":  "hele-pallet-beukenhout-recht-blur-inzoom-light_2048x2048.jpg",
+        "price":  363.27,
+        "regular":  447.1
+    },
+    {
+        "title":  "Brennholz Buche Abschnitte – 1 Festmeter (750 kg, trocken, kammergetrocknet)",
+        "url":  "https://holzpellets.amperkamin.com/produit/brennholz-buche-abschnitte-1-festmeter-750-kg-trocken-kammergetrocknet/",
+        "cat":  "kaminholz",
+        "img":  "Brennholz-Buche-Abschnitte-1-FM-1_2048x2048.jpg",
+        "price":  349.94,
+        "regular":  430.7
+    }
+]
+;
