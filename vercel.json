@@ -1,0 +1,5 @@
+{
+  "functions": {
+    "api/create-checkout-session.js": { "includeFiles": "data/**" }
+  }
+}

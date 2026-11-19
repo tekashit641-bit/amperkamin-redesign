@@ -324,9 +324,22 @@ details p{color:var(--muted);margin:.7em 0 0}
 .co__form legend{font-family:var(--serif);font-size:1.2rem;font-weight:600;margin-bottom:14px;padding:0}
 .co__form fieldset+fieldset{border-top:1px solid var(--line);padding-top:22px}
 .form__row--plz{grid-template-columns:140px 1fr}
-.paybox{display:flex;gap:14px;align-items:center;background:var(--bg);border:1.5px dashed var(--line);border-radius:14px;padding:16px}
-.paybox svg{width:28px;height:28px;fill:none;stroke:var(--muted);stroke-width:1.6;flex:none}
-.paybox p{margin:0;font-size:.9rem;color:var(--muted)}
+.form .payopt{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;font-size:1rem;font-weight:400;transition:border-color .15s,background .15s}
+.form .payopt:has(input:checked){border-color:var(--orange);background:#fffaf4}
+.form .payopt input{width:20px;height:20px;flex:none;margin:2px 0 0;padding:0;accent-color:var(--orange)}
+.payopt__text{display:grid;gap:4px}
+.payopt__text b{color:var(--ink)}
+.payopt__text small{color:var(--muted);font-size:.88rem;line-height:1.45}
+.paylogos{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.paylogos i{font-style:normal;font-size:.74rem;font-weight:600;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+.transfer-steps{text-align:left;background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:22px 24px;margin-top:14px;width:100%}
+.transfer-steps h2{font-size:1.2rem;margin:0 0 8px}
+.transfer-steps ol{margin:10px 0 12px;padding-left:22px;display:grid;gap:6px}
+.transfer-steps .btn{margin-top:6px}
+.payembed{max-width:760px;margin:10px auto 40px;display:grid;gap:16px}
+.payembed h1{font-size:clamp(1.6rem,3vw,2.1rem);margin:0;text-align:center}
+.payembed #stripeCheckout{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:10px;min-height:200px}
+.payembed .link{justify-self:center}
 .co__submit{font-size:1.05rem;padding:17px 24px}
 .co__summary{position:sticky;top:96px;background:#fff;border-radius:24px;padding:26px;box-shadow:var(--shadow)}
 .co__summary h2{font-size:1.3rem}
@@ -379,8 +392,8 @@ details p{color:var(--muted);margin:.7em 0 0}
 .drawer__list .drawer__empty{display:block;text-align:center;color:var(--muted);padding:48px 0;border:0}
 .drawer__foot{padding:20px 22px;border-top:1px solid var(--line);background:#fff}
 .sum{display:flex;justify-content:space-between;font-size:1.1rem}
-.toast{position:fixed;left:50%;bottom:24px;translate:-50% 160%;background:var(--forest);color:#fff;padding:12px 20px;border-radius:999px;font-size:.92rem;z-index:60;transition:translate .3s}
-.toast.show{translate:-50% 0}
+.toast{position:fixed;left:50%;bottom:24px;translate:-50% 160%;background:var(--forest);color:#fff;padding:12px 20px;border-radius:999px;font-size:.92rem;z-index:60;opacity:0;visibility:hidden;transition:translate .3s,opacity .3s,visibility .3s}
+.toast.show{translate:-50% 0;opacity:1;visibility:visible}
 
 /* Responsive */
 @media (max-width:1020px){

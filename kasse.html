@@ -47,9 +47,26 @@
     <h1>Vielen Dank für Ihre Bestellung!</h1>
     <p>Bestellnummer: <strong id="orderRef"></strong></p>
     <p class="muted">Bestätigung per E-Mail an: <strong id="orderMail"></strong></p>
-    <p class="muted">Wir melden uns, um den Liefertermin abzustimmen.</p>
-    <p class="demo-note">Demo-Version: Es wurde keine echte Bestellung ausgelöst.</p>
+    <p class="muted" id="doneOnline" hidden>Ihre Zahlung wurde von Stripe bestätigt. Wir melden uns, um den Liefertermin abzustimmen.</p>
+    <div class="transfer-steps" id="doneTransfer" hidden>
+      <h2>Bezahlung per Banküberweisung</h2>
+      <p>Ihr Angebot (PDF) wurde heruntergeladen und Ihr E-Mail-Programm öffnet sich mit einer vorbereiteten Nachricht.</p>
+      <ol>
+        <li>Hängen Sie das heruntergeladene Angebot an die E-Mail an.</li>
+        <li>Senden Sie die Nachricht – wir antworten mit unserer Bankverbindung.</li>
+        <li>Nach Zahlungseingang stimmen wir den Liefertermin mit Ihnen ab.</li>
+      </ol>
+      <p class="muted small">Ihr E-Mail-Programm hat sich nicht geöffnet? Schreiben Sie uns an <a class="shop-mail" href="mailto:info@example.com">info@example.com</a> und hängen Sie Ihr Angebot an.</p>
+      <button class="btn btn--ghost" type="button" id="quoteAgain">Angebot erneut herunterladen</button>
+    </div>
     <a href="shop.html" class="btn">Weiter einkaufen</a>
+  </section>
+
+  <!-- Online payment (Stripe Embedded Checkout) -->
+  <section class="payembed" id="payEmbed" hidden>
+    <h1>Sichere Zahlung</h1>
+    <div id="stripeCheckout"></div>
+    <button class="link" type="button" id="payCancel">← Bestellung ändern</button>
   </section>
 
   <!-- Empty cart -->
@@ -81,20 +98,28 @@
           <label>PLZ *<input name="plz" inputmode="numeric" autocomplete="postal-code" required></label>
           <label>Ort *<input name="ort" autocomplete="address-level2" required></label>
         </div>
-        <label>Land
-          <select name="land" autocomplete="country-name">
-            <option>Deutschland</option>
-            <option>Österreich</option>
-          </select>
-        </label>
+        <label>Land *<input name="land" list="countries" autocomplete="country-name" value="Deutschland" required></label>
+        <datalist id="countries">
+          <option value="Deutschland"><option value="Österreich"><option value="Schweiz"><option value="Luxemburg"><option value="Liechtenstein">
+          <option value="Belgien"><option value="Niederlande"><option value="Frankreich"><option value="Dänemark"><option value="Polen">
+          <option value="Tschechien"><option value="Slowakei"><option value="Ungarn"><option value="Slowenien"><option value="Kroatien">
+          <option value="Italien"><option value="Spanien"><option value="Portugal"><option value="Irland"><option value="Vereinigtes Königreich">
+          <option value="Schweden"><option value="Norwegen"><option value="Finnland"><option value="Estland"><option value="Lettland">
+          <option value="Litauen"><option value="Rumänien"><option value="Bulgarien"><option value="Griechenland"><option value="Malta"><option value="Zypern">
+        </datalist>
         <label>Hinweise zur Lieferung<textarea name="hinweis" rows="3" placeholder="z. B. Zufahrt, Abladestelle, beste Erreichbarkeit"></textarea></label>
       </fieldset>
       <fieldset>
         <legend>Zahlungsart</legend>
-        <div class="paybox">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3z"/><path d="M3 10h18"/></svg>
-          <p>Die Zahlungsarten werden bei der Anbindung an WooCommerce eingerichtet.</p>
-        </div>
+        <label class="payopt">
+          <input type="radio" name="zahlung" value="online" checked>
+          <span class="payopt__text"><b>Online bezahlen</b><small>Sicher über Stripe – die verfügbaren Zahlungsmittel werden im nächsten Schritt angezeigt.</small>
+            <span class="paylogos" aria-label="Zahlungsmittel"><i>Visa</i><i>Mastercard</i><i>Apple Pay</i><i>Google Pay</i><i>Klarna</i></span></span>
+        </label>
+        <label class="payopt">
+          <input type="radio" name="zahlung" value="ueberweisung">
+          <span class="payopt__text"><b>Banküberweisung</b><small>Sie erhalten Ihr Angebot als PDF. Unsere Bankverbindung senden wir Ihnen per E-Mail; die Lieferung erfolgt nach Zahlungseingang.</small></span>
+        </label>
       </fieldset>
       <label class="check"><input type="checkbox" name="agb" required><span>Ich akzeptiere die <a href="#">AGB</a> und die <a href="#">Widerrufsbelehrung</a>. *</span></label>
       <p class="form__error" id="coError" role="alert" hidden></p>
@@ -140,6 +165,8 @@
 </aside>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<script src="assets/shop-config.js"></script>
 <script src="data/catalogue.js"></script>
 <script src="data/neue-produkte.js"></script>
 <script src="assets/lang.js"></script>
