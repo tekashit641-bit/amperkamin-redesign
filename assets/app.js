@@ -251,7 +251,7 @@
         <ul class="pd__trust">
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg><span><b>Lieferung per LKW</b>Liefertermin wird nach der Bestellung abgestimmt</span></li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg><span><b>Sichere Bezahlung</b>Verschlüsselte Übertragung Ihrer Daten</span></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H8l-4 4z"/></svg><span><b>Fragen?</b><a href="tel:+490000000000">+49 000 000 000</a></span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H8l-4 4z"/></svg><span><b>Fragen?</b><a href="tel:+491784322763">+49 178 4322763</a></span></li>
         </ul>
       </div>`;
     $("#specs").innerHTML = p.specs.map(([k, v]) => `<tr><th scope="row">${k}</th><td>${v}</td></tr>`).join("") +
@@ -323,7 +323,7 @@
     f.querySelectorAll("[required]").forEach(x => {
       const bad = x.type === "checkbox" ? !x.checked : !x.value.trim() ||
         (x.type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x.value)) ||
-        (x.name === "plz" && !/^\d{4,5}$/.test(x.value.trim()));
+        (x.name === "plz" && !/^[A-Za-z0-9][A-Za-z0-9 -]{1,9}$/.test(x.value.trim()));
       x.setAttribute("aria-invalid", bad);
       if (bad && !first) first = x;
     });
@@ -341,7 +341,7 @@
   // ---------- Checkout page ----------
   function renderCheckout() {
     const ids = Object.keys(cart).filter(byId);
-    const done = !$("#orderDone").hidden;
+    const done = !$("#orderDone").hidden || !$("#payEmbed").hidden;
     $("#coEmpty").hidden = ids.length > 0 || done;
     $("#coMain").hidden = !ids.length || done;
     if (!ids.length) return;
@@ -356,13 +356,25 @@
     $("#coTotal").textContent = eur(cartTotal());
   }
   if (isCheckout) {
+    const SHOP = window.SHOP || { name: "AMPERKAMIN", email: "", address: [], legal: [], onlinePayment: true };
     const co = $("#checkoutForm");
-    co.addEventListener("submit", e => {
-      e.preventDefault();
-      if (!validate(co, $("#coError"), "Bitte akzeptieren Sie die AGB und die Widerrufsbelehrung.")) return;
-      const ref = "AK-" + Date.now().toString().slice(-6);
+    const submitBtn = co.querySelector(".co__submit");
+    const submitLabel = submitBtn.textContent;
+    const t = s => (window.I18N ? I18N.t(s) : s);
+    const showError = msg => { const err = $("#coError"); err.textContent = t(msg); err.hidden = false; err.scrollIntoView({ behavior: "smooth", block: "center" }); };
+    document.querySelectorAll(".shop-mail").forEach(a => { a.href = "mailto:" + SHOP.email; a.textContent = SHOP.email; });
+    if (!SHOP.onlinePayment) {
+      co.querySelector('input[value="online"]').closest(".payopt").hidden = true;
+      co.querySelector('input[value="ueberweisung"]').checked = true;
+    }
+
+    function finish(ref, email, method) {
       $("#orderRef").textContent = ref;
-      $("#orderMail").textContent = co.email.value.trim();
+      $("#orderMail").textContent = email;
+      $("#orderMail").parentElement.hidden = method === "transfer" || !email;
+      $("#doneOnline").hidden = method !== "online";
+      $("#doneTransfer").hidden = method !== "transfer";
+      $("#payEmbed").hidden = true;
       cart = {}; save();
       $("#orderDone").hidden = false;
       document.querySelectorAll(".steps-bar li").forEach((li, i) => {
@@ -372,7 +384,190 @@
       });
       renderCart();
       window.scrollTo({ top: 0 });
+    }
+
+    // Snapshot of the order taken when the form is submitted
+    function readOrder() {
+      const v = n => co[n].value.trim();
+      const d = new Date(), z = n => String(n).padStart(2, "0");
+      const ids = Object.keys(cart).filter(byId);
+      return {
+        ref: `AK-${d.getFullYear()}${z(d.getMonth() + 1)}${z(d.getDate())}-${z(d.getHours())}${z(d.getMinutes())}${z(d.getSeconds())}`,
+        date: `${z(d.getDate())}.${z(d.getMonth() + 1)}.${d.getFullYear()}`,
+        name: `${v("vorname")} ${v("nachname")}`, email: v("email"), tel: v("tel"),
+        street: v("strasse"), city: `${v("plz")} ${v("ort")}`, country: v("land"), note: v("hinweis"),
+        lines: ids.map(id => ({ id, title: byId(id).title, qty: cart[id], price: byId(id).price })),
+        total: cartTotal()
+      };
+    }
+
+    // ----- Bank transfer: PDF quote + pre-filled e-mail -----
+    let lastOrder = null, logoData = null;
+    function loadLogo() {
+      if (logoData !== null) return Promise.resolve(logoData);
+      return new Promise(res => {
+        const img = new Image();
+        img.onload = () => {
+          try {
+            const c = document.createElement("canvas");
+            c.width = img.naturalWidth; c.height = img.naturalHeight;
+            c.getContext("2d").drawImage(img, 0, 0);
+            logoData = { url: c.toDataURL("image/png"), ratio: img.naturalHeight / img.naturalWidth };
+          } catch { logoData = false; }
+          res(logoData);
+        };
+        img.onerror = () => { logoData = false; res(false); };
+        img.src = SHOP.logo;
+      });
+    }
+    async function quotePdf(o) {
+      const J = window.jspdf && window.jspdf.jsPDF;
+      if (!J) throw new Error("no-pdf");
+      const logo = await loadLogo();
+      const doc = new J({ unit: "mm", format: "a4" });
+      const L = 15, R = 195, money = n => eur(n).replace(/ | /g, " ");
+      let y;
+      const txt = (s, x, yy, o2, size, bold, col) => { doc.setFont("helvetica", bold ? "bold" : "normal"); doc.setFontSize(size || 10); doc.setTextColor(col == null ? 30 : col); doc.text(s, x, yy, o2 || {}); };
+      const need = h => { if (y + h > 282) { doc.addPage(); y = 18; } };
+      const para = (s, size, col, gap) => { const l = doc.splitTextToSize(s, R - L); need(l.length * size * 0.42 + gap); txt(l, L, y, 0, size, 0, col); y += l.length * size * 0.42 + gap; };
+
+      if (logo) doc.addImage(logo.url, "PNG", L, 12, 52, 52 * logo.ratio);
+      doc.setFillColor(243, 234, 220); doc.rect(120, 14, 75, 18, "F");
+      txt(t("ANGEBOT"), 157.5, 26, { align: "center" }, 15, 1, 43);
+      txt(SHOP.address[0] || SHOP.name, L, 44, 0, 10, 1);
+      SHOP.address.slice(1).concat([SHOP.email, SHOP.phone].filter(Boolean)).forEach((s, i) => txt(s, L, 49 + i * 5, 0, 9.5));
+      txt(o.name, 120, 44, 0, 10, 1);
+      const cl = [o.street, o.city, o.country, o.tel, o.email];
+      cl.forEach((s, i) => txt(s, 120, 49 + i * 5, 0, 9.5));
+      y = 49 + Math.max(cl.length, SHOP.address.length + 1) * 5 + 6;
+      doc.setFillColor(243, 234, 220); doc.rect(L, y, R - L, 14, "F");
+      txt(`${t("Angebotsnummer")}: ${o.ref}`, L + 3, y + 5.5, 0, 9.5);
+      txt(`${t("Datum")}: ${o.date}`, L + 3, y + 10.5, 0, 9.5);
+      y += 21;
+
+      const cx = [L, 35, 140, 166], cw = [20, 105, 26, 29];
+      doc.setDrawColor(200, 190, 175);
+      const head = [t("Menge"), t("Artikel"), t("Einzelpreis"), t("Gesamt")];
+      head.forEach((s, i) => { doc.setFillColor(243, 234, 220); doc.rect(cx[i], y, cw[i], 8, "FD"); txt(s, i > 1 ? cx[i] + cw[i] - 2 : cx[i] + 2, y + 5.3, i > 1 ? { align: "right" } : 0, 9, 1); });
+      y += 8;
+      o.lines.forEach(l => {
+        const wl = doc.splitTextToSize(t(l.title), cw[1] - 4), h = Math.max(8, wl.length * 4.2 + 3.8);
+        need(h);
+        [String(l.qty), wl, money(l.price), money(l.price * l.qty)].forEach((s, i) => {
+          doc.rect(cx[i], y, cw[i], h, "S");
+          txt(s, i > 1 ? cx[i] + cw[i] - 2 : cx[i] + 2, y + 5.3, i > 1 ? { align: "right" } : 0, 9);
+        });
+        y += h;
+      });
+      need(30); y += 4;
+      doc.rect(120, y, 75, 9); txt(t("Gesamtbetrag inkl. MwSt."), 122, y + 6, 0, 9.5, 1); txt(money(o.total), 193, y + 6, { align: "right" }, 9.5, 1);
+      y += 16;
+      para(t("Alle Preise inkl. gesetzl. MwSt. Die Lieferkosten richten sich nach Ihrer Lieferadresse und werden Ihnen vor der Lieferung bestätigt."), 8.5, 90, 4);
+      if (o.note) para(`${t("Hinweise zur Lieferung")}: ${o.note}`, 9, 40, 4);
+      para([t("Zahlung per Banküberweisung. Unsere Bankverbindung erhalten Sie per E-Mail."), t("Die Lieferung erfolgt nach Zahlungseingang; den Liefertermin stimmen wir mit Ihnen ab."), t("Bitte geben Sie bei der Überweisung die Angebotsnummer als Verwendungszweck an.")].join("\n"), 9, 40, 8);
+      need(22);
+      SHOP.legal.forEach((s, i) => txt(s, L, y + i * 4, 0, 7.5, 1, 90));
+      return doc;
+    }
+    async function downloadQuote(o) {
+      const blob = (await quotePdf(o)).output("blob");
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob); a.download = `Angebot-${SHOP.name}-${o.ref}.pdf`;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    }
+    const MAIL = {
+      de: { s: "Bestellung per Überweisung – Angebot ", h: "Guten Tag,", b: "ich möchte meine Bestellung per Banküberweisung bezahlen. Bitte senden Sie mir Ihre Bankverbindung.", a: "Mein Angebot finden Sie im Anhang.", r: "Angebotsnummer", t: "Gesamtbetrag inkl. MwSt.", i: "Artikel", n: "Name", p: "Telefon", e: "E-Mail", d: "Lieferadresse", x: "Hinweise zur Lieferung", c: "Mit freundlichen Grüßen" },
+      fr: { s: "Commande par virement – Devis ", h: "Bonjour,", b: "Je souhaite régler ma commande par virement bancaire. Merci de m’envoyer vos coordonnées bancaires.", a: "Vous trouverez mon devis en pièce jointe.", r: "Référence du devis", t: "Montant total TTC", i: "Articles", n: "Nom", p: "Téléphone", e: "E-mail", d: "Adresse de livraison", x: "Indications de livraison", c: "Cordialement," },
+      en: { s: "Order by bank transfer – Quote ", h: "Hello,", b: "I would like to pay for my order by bank transfer. Please send me your bank details.", a: "Please find my quote attached.", r: "Quote number", t: "Total incl. VAT", i: "Items", n: "Name", p: "Phone", e: "E-mail", d: "Delivery address", x: "Delivery notes", c: "Kind regards," },
+      es: { s: "Pedido por transferencia – Presupuesto ", h: "Buenos días:", b: "Deseo pagar mi pedido por transferencia bancaria. Por favor, envíenme sus datos bancarios.", a: "Adjunto mi presupuesto.", r: "Número de presupuesto", t: "Importe total con IVA", i: "Artículos", n: "Nombre", p: "Teléfono", e: "Correo electrónico", d: "Dirección de entrega", x: "Indicaciones de entrega", c: "Atentamente," }
+    };
+    async function payByTransfer(o) {
+      lastOrder = o;
+      try { await downloadQuote(o); }
+      catch { showError("Das Angebot konnte nicht erstellt werden. Bitte versuchen Sie es erneut oder kontaktieren Sie uns."); return; }
+      const m = MAIL[window.I18N ? I18N.lang : "de"] || MAIL.de, sep = ": ";
+      const body = [m.h, "", m.b, "", m.a, "", m.r + sep + o.ref, m.t + sep + eur(o.total), "", m.i + ":"]
+        .concat(o.lines.map(l => `- ${l.qty} × ${t(l.title)} – ${eur(l.price * l.qty)}`))
+        .concat(["", m.n + sep + o.name, m.p + sep + o.tel, m.e + sep + o.email, m.d + sep + [o.street, o.city, o.country].join(", ")])
+        .concat(o.note ? [m.x + sep + o.note] : [])
+        .concat(["", m.c, o.name]).join("\r\n");
+      finish(o.ref, o.email, "transfer");
+      setTimeout(() => { location.href = `mailto:${SHOP.email}?subject=${encodeURIComponent(m.s + o.ref)}&body=${encodeURIComponent(body)}`; }, 700);
+    }
+    $("#quoteAgain").onclick = () => { if (lastOrder) downloadQuote(lastOrder).catch(() => toast(t("Das Angebot konnte nicht erstellt werden. Bitte versuchen Sie es erneut oder kontaktieren Sie uns."))); };
+
+    // ----- Online payment: Stripe Embedded Checkout (api/ = Vercel functions) -----
+    let stripeLoading = null, embedded = null;
+    function loadStripe() {
+      if (typeof Stripe === "function") return Promise.resolve();
+      if (stripeLoading) return stripeLoading;
+      stripeLoading = new Promise((resolve, reject) => {
+        const s = document.createElement("script");
+        s.src = "https://js.stripe.com/v3/"; s.async = true;
+        s.onload = () => typeof Stripe === "function" ? resolve() : reject(new Error("load"));
+        s.onerror = () => { stripeLoading = null; reject(new Error("load")); };
+        document.head.appendChild(s);
+      });
+      return stripeLoading;
+    }
+    function closeEmbed() {
+      if (embedded) { try { embedded.destroy(); } catch {} embedded = null; }
+      $("#payEmbed").hidden = true;
+      renderCheckout();
+    }
+    async function payOnline(o) {
+      submitBtn.disabled = true; submitBtn.textContent = t("Zahlung wird vorbereitet …");
+      try {
+        await loadStripe();
+        const payload = {
+          cart: o.lines.map(l => ({ id: l.id, quantity: l.qty })),
+          locale: window.I18N ? I18N.lang : "de",
+          customer: { name: o.name, email: o.email, phone: o.tel, address: [o.street, o.city, o.country].join(", "), note: o.note }
+        };
+        const [r1, r2] = await Promise.all([
+          fetch("api/create-checkout-session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }),
+          fetch("api/stripe-config")
+        ]);
+        const data = await r1.json().catch(() => ({})), cfg = await r2.json().catch(() => ({}));
+        // Only our own API messages are shown (validation, rate limit, Stripe refusal); anything else gets the generic message
+        if (!r1.ok || !data.clientSecret) throw new Error([400, 429, 502].includes(r1.status) && data.error || "");
+        if (!r2.ok || !cfg.publishableKey) throw new Error("");
+        const stripe = Stripe(cfg.publishableKey, { locale: payload.locale });
+        embedded = await stripe.initEmbeddedCheckout({ clientSecret: data.clientSecret });
+        $("#coMain").hidden = true; $("#payEmbed").hidden = false;
+        embedded.mount("#stripeCheckout");
+        window.scrollTo({ top: 0 });
+      } catch (err) {
+        closeEmbed();
+        showError((err && err.message) || "Die Online-Zahlung ist derzeit nicht verfügbar. Bitte wählen Sie Banküberweisung oder versuchen Sie es später erneut.");
+      } finally {
+        submitBtn.disabled = false; submitBtn.textContent = submitLabel;
+      }
+    }
+    $("#payCancel").onclick = closeEmbed;
+
+    co.addEventListener("submit", e => {
+      e.preventDefault();
+      if (!validate(co, $("#coError"), "Bitte akzeptieren Sie die AGB und die Widerrufsbelehrung.")) return;
+      const o = readOrder();
+      if (!o.lines.length) return;
+      if (co.zahlung.value === "ueberweisung") payByTransfer(o); else payOnline(o);
     });
+
+    // Return from Stripe: confirm the payment on the server before showing success
+    const ret = new URLSearchParams(location.search);
+    if (ret.get("checkout") === "success") {
+      const sid = ret.get("session_id") || "";
+      history.replaceState(null, "", location.pathname);
+      fetch("api/checkout-session?session_id=" + encodeURIComponent(sid))
+        .then(r => r.json().then(d => { if (!r.ok) throw new Error(d.error); return d; }))
+        .then(d => {
+          if (d.paymentStatus === "paid") finish(d.orderReference || "–", d.email || "", "online");
+          else showError("Ihre Zahlung ist noch nicht bestätigt. Sie erhalten eine E-Mail, sobald sie eingegangen ist.");
+        })
+        .catch(() => showError("Die Zahlung wurde übermittelt, konnte aber nicht überprüft werden. Bitte prüfen Sie Ihre E-Mails oder kontaktieren Sie uns, bevor Sie erneut bestellen."));
+    }
   }
 
   if (isShop) {
