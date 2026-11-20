@@ -1,14 +1,14 @@
 /*
  * AMPERKAMIN – company details used on the checkout page
  * (PDF quote for bank transfer, pre-filled e-mail).
- * Replace every value in [brackets] with the real data before going live.
+ * Same data as impressum.html – update both if something changes.
  */
 window.SHOP = {
   name: "AMPERKAMIN",
-  email: "info@example.com",            // address that receives bank-transfer orders
-  phone: "+49 000 000 000",
-  address: ["[Firmenname]", "[Straße Nr.]", "[PLZ Ort]", "Deutschland"],
-  legal: ["[Firmenname, Rechtsform]", "USt-IdNr.: [DE000000000]", "Handelsregister: [Amtsgericht, HRB-Nr.]"],
+  email: "de.kontakt@amperkamin.com",   // address that receives bank-transfer orders
+  phone: "+49 178 4322763",
+  address: ["Ampersand GmbH", "Sachsstraße 22", "50259 Pulheim", "Deutschland"],
+  legal: ["Ampersand GmbH · Geschäftsführer: Marcel Nießen", "Amtsgericht Aachen, HRB 22273", "USt-IdNr.: DE319956711"],
   logo: "assets/img/logo-amperkamin.png",
   // false = hide the online payment option (e.g. while the Stripe account is not ready)
   onlinePayment: true

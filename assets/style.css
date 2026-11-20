@@ -235,6 +235,16 @@ details p{color:var(--muted);margin:.7em 0 0}
 .widepic{width:100%;aspect-ratio:21/8;object-fit:cover;border-radius:26px;margin-top:-44px;box-shadow:0 20px 50px rgba(60,30,10,.18)}
 .prose{max-width:780px;margin:90px auto}
 .prose p:not(.eyebrow){color:var(--muted);font-size:1.05rem}
+.legal{margin:56px auto 90px}
+.legal h2{font-size:1.3rem;margin:34px 0 10px}
+.legal p:not(.eyebrow),.legal li{font-size:.98rem;line-height:1.7;color:var(--muted)}
+.legal ul{padding-left:20px;display:grid;gap:8px}
+.legal strong{color:var(--ink)}
+.legal__note{background:var(--bg-2);border-radius:12px;padding:12px 16px;color:var(--ink)!important}
+html[lang="de"] .legal__note{display:none}
+.legal__form{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:20px 22px;margin-top:12px}
+.legal__form p{margin:8px 0}
+.legal__form .legal__line{border-bottom:1px dotted var(--muted);height:22px;margin:0 0 14px}
 .narrow{max-width:60ch;margin-inline:auto}
 .ph{background:#fff4d6;outline:1px dashed #d9a441;border-radius:6px;padding:0 4px}
 .method{list-style:none;padding:0;margin:40px 0 0;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}

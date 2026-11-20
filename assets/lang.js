@@ -437,6 +437,16 @@ window.LANG = {
     "Zu viele Versuche. Bitte versuchen Sie es in einigen Minuten erneut.": ["Trop de tentatives. Réessayez dans quelques minutes.", "Too many attempts. Please try again in a few minutes.", "Demasiados intentos. Inténtalo de nuevo en unos minutos."],
     "Ungültiger Warenkorb.": ["Panier non valide.", "Invalid cart.", "Carrito no válido."],
     "Ungültiger Artikel oder ungültige Menge.": ["Article ou quantité non valide.", "Invalid item or quantity.", "Artículo o cantidad no válidos."],
+    /* Legal pages (body text is German only – contract language) */
+    "Allgemeine Geschäftsbedingungen": ["Conditions générales de vente", "General terms and conditions", "Condiciones generales de venta"],
+    "Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG)": ["Informations légales selon le § 5 de la loi allemande DDG", "Information pursuant to § 5 of the German Digital Services Act (DDG)", "Información según el § 5 de la ley alemana DDG"],
+    "Stand: 23. Oktober 2026": ["Version du 23 octobre 2026", "Version of 23 October 2026", "Versión del 23 de octubre de 2026"],
+    "Stand: 20. November 2026": ["Version du 20 novembre 2026", "Version of 20 November 2026", "Versión del 20 de noviembre de 2026"],
+    "Dieser Rechtstext ist nur auf Deutsch verfügbar. Der Vertrag wird in deutscher Sprache geschlossen.": ["Ce texte juridique n'est disponible qu'en allemand, langue dans laquelle le contrat est conclu.", "This legal text is only available in German, the language in which the contract is concluded.", "Este texto legal solo está disponible en alemán, idioma en el que se celebra el contrato."],
+    "Impressum und Anbieterkennzeichnung von AMPERKAMIN, einem Online-Shop der Ampersand GmbH.": ["Mentions légales d'AMPERKAMIN, boutique en ligne d'Ampersand GmbH.", "Legal notice of AMPERKAMIN, an online shop of Ampersand GmbH.", "Aviso legal de AMPERKAMIN, tienda en línea de Ampersand GmbH."],
+    "Datenschutzerklärung des Online-Shops AMPERKAMIN.": ["Politique de confidentialité de la boutique en ligne AMPERKAMIN.", "Privacy policy of the AMPERKAMIN online shop.", "Política de privacidad de la tienda en línea AMPERKAMIN."],
+    "Allgemeine Geschäftsbedingungen des Online-Shops AMPERKAMIN.": ["Conditions générales de vente de la boutique en ligne AMPERKAMIN.", "General terms and conditions of the AMPERKAMIN online shop.", "Condiciones generales de venta de la tienda en línea AMPERKAMIN."],
+    "Widerrufsbelehrung und Muster-Widerrufsformular von AMPERKAMIN.": ["Droit de rétractation et formulaire type de rétractation d'AMPERKAMIN.", "Right of withdrawal and model withdrawal form of AMPERKAMIN.", "Derecho de desistimiento y formulario modelo de AMPERKAMIN."],
     /* PDF quote */
     "ANGEBOT": ["DEVIS", "QUOTE", "PRESUPUESTO"],
     "Angebotsnummer": ["Numéro de devis", "Quote number", "Número de presupuesto"],

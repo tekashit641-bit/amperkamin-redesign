@@ -251,7 +251,7 @@
         <ul class="pd__trust">
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg><span><b>Lieferung per LKW</b>Liefertermin wird nach der Bestellung abgestimmt</span></li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg><span><b>Sichere Bezahlung</b>Verschlüsselte Übertragung Ihrer Daten</span></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H8l-4 4z"/></svg><span><b>Fragen?</b><a href="tel:+490000000000">+49 000 000 000</a></span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H8l-4 4z"/></svg><span><b>Fragen?</b><a href="tel:+491784322763">+49 178 4322763</a></span></li>
         </ul>
       </div>`;
     $("#specs").innerHTML = p.specs.map(([k, v]) => `<tr><th scope="row">${k}</th><td>${v}</td></tr>`).join("") +
